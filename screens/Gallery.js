@@ -3,6 +3,7 @@ import { StyleSheet, Button, View, TextInput, Linking, PermissionsAndroid, Platf
 import CameraRoll from "@react-native-community/cameraroll";
 
 async function hasAndroidPermission() {
+    debugger
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
 
     const hasPermission = await PermissionsAndroid.check(permission);
@@ -18,19 +19,17 @@ async function getAlbums() {
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {
         return;
     }
-
-    CameraRoll.getPhotos({
+    console.log('started')
+    return CameraRoll.getPhotos({
         first: 20,
         assetType: 'Photos',
-    })
-        .then(r => {
-            console.log(r)
-        })
-        .catch((err) => {
-            //Error Loading Images
-        });
-
-        return 'fdg'
+      })
+      .then(r => {
+        this.setState({ photos: r.edges });
+      })
+      .catch((err) => {
+         //Error Loading Images
+      });
     // return CameraRoll.getAlbums({ assetType: 'All' });
 };
 
@@ -46,7 +45,7 @@ function Gallery({ navigation }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <TextInput style={styles.input} value={number} onChangeText={onChangeNumber} />
             <Button
-                onPress={() => getAlbums()}
+                onPress={getAlbums}
                 title="Go1" />
         </View>
     );
